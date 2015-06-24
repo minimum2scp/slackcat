@@ -12,6 +12,7 @@ import (
 	"net/url"
 	"os"
 	"os/user"
+	"github.com/mitchellh/go-homedir"
 	"strings"
 
 	"github.com/ogier/pflag"
@@ -24,10 +25,9 @@ type Config struct {
 }
 
 func ReadConfig() (*Config, error) {
-	homeDir := ""
-	usr, err := user.Current()
-	if err == nil {
-		homeDir = usr.HomeDir
+	homeDir, err := homedir.Dir()
+	if err != nil {
+		return nil, errors.New("cannot get homedir")
 	}
 
 	for _, path := range []string{"/etc/slackcat.conf", homeDir + "/.slackcat.conf", "./slackcat.conf"} {
