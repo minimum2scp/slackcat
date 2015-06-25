@@ -2,9 +2,20 @@ language: go
 go:
   - 1.4
 before_install:
-  - go get github.com/mitchellh/gox
-  - gox -os="linux darwin windows" -arch="amd64 386" -build-toolchain
-  - go get github.com/tcnksm/ghr
-after_success:
-  - gox -os="linux darwin windows" -arch="amd64 386" -output "dist/{{.Dir}}_{{.OS}}_{{.Arch}}"
-  - ghr --username minimum2scp --token $GITHUB_TOKEN --replace --prerelease --debug pre-release dist/
+  - go get github.com/laher/goxc
+  - goxc -os="linux darwin windows" -arch="386 amd64" -t
+script:
+  - goxc -os="linux darwin windows" -arch="386 amd64" -d . -n slackcat
+deploy:
+  provider: releases
+  api_key:
+    secure: DZEkikmY2JFOs7blHKDKSu8XCp6E8uFmVZFlX0W8wygyLnwtW9Xytv9nXjvlD/WAvObgU25NLBmz0BsnxiY9ATsTMw0KxHScZRxhlTQlwwm+Rhf5VtebtGxAyJKfgEr5D0qLKY2GEA5Ba5uUFhJ+qLloMbe+qCOSJ9bD05W14YyNpAg7dI8uo0tSxmNGrdeLco6YQTTBXvpCr9Rx13dlxjoX2hhemzyKOi/T38QcHFY2yqAzQHzY84vmNXB1axJkZTNWTSMxcqhN3cTJcLvqba9UayeLMvRZN2jdhVE4kPzN0zfFCv7JxXbLKPQPVZei039sdN0z1XmGkhVxMrWsu16VG8YDPVQctWBVlf/uUj7/b71JzNu0dIBzz9WeIpCKPqI74AfIvkb7FAYG3bznVvMIQr9Kt8KKno8ChClDAz6zQ7vua4yDsgKirIP8ffiqb69MueZadE7iaU6vz2gckGvFVJ0Fq6oHTTlHFG2HCsvbzAcCKEuxXHmglTcq4hRJqfqcfiH2i71B9v02dw3MxiEXP+qgfRFonruhPgVTy1XDoF67uNyefWgbgS7QbvzXtVi+ow7BxQat7dGdYovQt6G6/xMiMXx0U0bMsOCbyYhmNpHghnfdYNJxWX/ae7Y34dmro3tNjieoaXsPjPQ7L1xFXUeJ80kkEHaJeWuP49E=
+  file:
+    - snapshot/slackcat_linux_386.tar.gz
+    - snapshot/slackcat_linux_amd64.tar.gz
+    - snapshot/slackcat_darwin_386.zip
+    - snapshot/slackcat_darwin_amd64.zip
+    - snapshot/slackcat_windows_386.zip
+    - snapshot/slackcat_windows_amd64.zip
+  on:
+    repo: minimum2scp/slackcat
