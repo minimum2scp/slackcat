@@ -19,3 +19,5 @@ deploy:
     - snapshot/slackcat_windows_amd64.zip
   on:
     repo: minimum2scp/slackcat
+    all_branches: true
+
